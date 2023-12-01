@@ -5,28 +5,62 @@ from .utils import *
 
 
 class WeatherEntry:
+    """
+    A class for parsing and storing a single weather entry.
+    """
+    
     time: datetime
+    """Time at which this entry occured"""
 
     sky_temperature: float
+    """Sky temperature in Celcius"""
     ambient_temperature: float
+    """Ambient temperature in Celcius"""
     sensor_temperature: float
+    """Sensor temperature"""
     wind_speed: float
+    """Wind speed in mph"""
     humidity: float
+    """Humidity"""
     dew_point: float
+    """Dewpoint in Celcius"""
     dew_heater_percentage: float
+    """Dew heater percentage"""
     
     is_raining: bool
+    """Is raining"""
     is_wet: bool
+    """Is wet"""
 
     cloudy: CloudyFlags
+    """Cloud status"""
     wind_limit: WindLimitFlags
+    """Wind status"""
     rain: RainFlags
+    """Rain status"""
     darkness: DarknessFlags
+    """Darkness status"""
 
     roof_closed: bool
+    """Is the roof closed"""
     alert: bool
+    """Is there an alert"""
 
     def __init__(self, entry: str):
+        """
+        Initialize object with a weather entry.
+
+        Parameters
+        ----------
+        entry : str
+            Raw weather entry
+
+        Raises
+        ------
+        WeatherParseError
+            Invalid format
+        """
+        
         parsed = entry.split(" ")
         while "" in parsed:
             parsed.remove("")
@@ -46,7 +80,7 @@ class WeatherEntry:
         self.ambient_temperature = processTemp(float(parsed[5]), temp_scale)
         self.sensor_temperature = processTemp(float(parsed[6]), temp_scale)
         self.wind_speed = processSpeed(float(parsed[7]), wind_scale)
-        self.humidity = processTemp(float(parsed[8]), temp_scale)
+        self.humidity = float(parsed[8])
         self.dew_point = processTemp(float(parsed[9]), temp_scale)
         self.dew_heater_percentage = float(parsed[10])
         
