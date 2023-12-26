@@ -1,3 +1,5 @@
+from datetime import datetime
+import math
 from .entry import WeatherEntry
 
 
@@ -47,3 +49,36 @@ class EntryCollection:
             Processed entry
         """
         return WeatherEntry(line)
+    
+    def find(self, time: datetime) -> WeatherEntry:
+        """
+        Finds the next weather entry after this time.
+
+        Parameters
+        ----------
+        time : datetime
+            Time
+
+        Returns
+        -------
+        WeatherEntry
+            Weather entry after `time`
+        """
+        return self.__find(time)
+        
+        
+    def __find(self, time: datetime, _low: int = 0, _high: int = -1) -> WeatherEntry:
+        """
+        Internal method for searching
+        """
+        if _high == -1:
+            _high = len(self.entries) - 1
+            
+        if _high == _low:
+            return self.entries[_high]
+        
+        mid = math.floor(_low + ((_high - _low) / 2))
+        if self.entries[mid].time > time:
+            return self.__find(time, _low, mid)
+        else:
+            return self.__find(time, mid + 1, _high)
