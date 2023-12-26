@@ -12,6 +12,11 @@ class WeatherEntry:
 
     time: datetime
     """Time at which this entry occured"""
+    
+    temp_scale: TemperatureType
+    """Temperature format"""
+    wind_scale: WindSpeedType
+    """Wind speed format"""
 
     sky_temperature: float
     """Sky temperature in specified format"""
@@ -69,14 +74,14 @@ class WeatherEntry:
         self.time = datetime.strptime(
             parsed[0] + " " + parsed[1], "%Y-%m-%d %H:%M:%S.%f")
 
-        temp_scale = cast(TemperatureType, parsed[2])
-        wind_scale = cast(WindSpeedType, parsed[3])
+        self.temp_scale = cast(TemperatureType, parsed[2])
+        self.wind_scale = cast(WindSpeedType, parsed[3])
 
-        if temp_scale not in ["F", "C"]:
-            raise WeatherParseError(f"Invalid temperature scale: {temp_scale}")
+        if self.temp_scale not in ["F", "C"]:
+            raise WeatherParseError(f"Invalid temperature scale: {self.temp_scale}")
 
-        if wind_scale not in ["M", "K"]:
-            raise WeatherParseError(f"Invalid wind speed scale: {wind_scale}")
+        if self.wind_scale not in ["M", "K"]:
+            raise WeatherParseError(f"Invalid wind speed scale: {self.wind_scale}")
 
         self.sky_temperature = float(parsed[4])
         self.ambient_temperature = float(parsed[5])
