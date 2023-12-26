@@ -1,10 +1,10 @@
 from typing import Literal
 
-
 TemperatureType = Literal["F", "C"]
 WindSpeedType = Literal["M", "K"]
 
-def FtoC(f: float) -> float:
+
+def f_to_c(f: float) -> float:
     """
     Converts Fahrenheit to Celcius.
 
@@ -21,10 +21,27 @@ def FtoC(f: float) -> float:
     return (f - 32) * (5/9)
 
 
-def processTemp(temp: float, format: TemperatureType) -> float:
+def c_to_f(c: float) -> float:
+    """
+    Converts Celcius to Fahrenheit.
+
+    Parameters
+    ----------
+    c : float
+        _description_
+
+    Returns
+    -------
+    float
+        _description_
+    """
+    return (c * (5/9)) + 32
+
+
+def process_temp(temp: float, format: TemperatureType) -> float:
     """
     Standardized temperature. Converts `temp` to Celcius if `format` is `F`
-    and returns `temp` if `format` is `C`
+    and returns `temp` if `format` is `C`.
 
     Parameters
     ----------
@@ -41,18 +58,48 @@ def processTemp(temp: float, format: TemperatureType) -> float:
     if (format == "C"):
         return temp
     else:
-        return FtoC(temp)
-    
+        return f_to_c(temp)
 
-def KnotstoMPH(k: float) -> float:
+
+def knots_to_mph(k: float) -> float:
+    """
+    Converts knots to MPH.
+
+    Parameters
+    ----------
+    k : float
+        Speed in knots
+
+    Returns
+    -------
+    float
+        _description_
+    """
     return k * 1.151
 
 
-def processSpeed(speed: float, format: WindSpeedType) -> float:
+def process_speed(speed: float, format: WindSpeedType) -> float:
+    """
+    Standardized speed. Converts `speed` to MPH if `format` is `K`
+    and returns `speed` if format is `M`.
+
+    Parameters
+    ----------
+    speed : float
+        _description_
+    format : WindSpeedType
+        _description_
+
+    Returns
+    -------
+    float
+        _description_
+    """
     if (format == "M"):
         return speed
     else:
-        return KnotstoMPH(speed)
-    
+        return knots_to_mph(speed)
+
+
 class WeatherParseError(Exception):
     pass
