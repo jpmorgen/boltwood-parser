@@ -73,7 +73,7 @@ def knots_to_mph(k: float) -> float:
     Returns
     -------
     float
-        _description_
+        Speed in MPH
     """
     return k * 1.151
 
@@ -86,14 +86,14 @@ def process_speed(speed: float, format: WindSpeedType) -> float:
     Parameters
     ----------
     speed : float
-        _description_
+        Speed
     format : WindSpeedType
-        _description_
+        Boltwood II Format
 
     Returns
     -------
     float
-        _description_
+        Speed in MPH
     """
     if (format == "M"):
         return speed
