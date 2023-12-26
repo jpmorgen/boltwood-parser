@@ -52,7 +52,7 @@ class EntryCollection:
     
     def find(self, time: datetime) -> WeatherEntry:
         """
-        Finds the next weather entry after this time.
+        Finds the closest weather entry to this time.
 
         Parameters
         ----------
@@ -62,20 +62,30 @@ class EntryCollection:
         Returns
         -------
         WeatherEntry
-            Weather entry after `time`
+            Weather entry closest to `time`
         """
+        if time < self.entries[0].time:
+            return self.entries[0]
+        elif time > self.entries[-1].time:
+            return self.entries[-1]
+        
         return self.__find(time)
         
         
     def __find(self, time: datetime, _low: int = 0, _high: int = -1) -> WeatherEntry:
         """
-        Internal method for searching
+        Internal method for searching. Does not account for first or last entry.
         """
         if _high == -1:
             _high = len(self.entries) - 1
             
         if _high == _low:
-            return self.entries[_high]
+            found = self.entries[_high]
+            next_to_found = self.entries[_high - 1]
+            if abs(time.timestamp() - found.time.timestamp()) < abs(time.timestamp() - next_to_found.time.timestamp()):
+                return found
+            else:
+                return next_to_found
         
         mid = math.floor(_low + ((_high - _low) / 2))
         if self.entries[mid].time > time:

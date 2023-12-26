@@ -22,6 +22,7 @@ def test_collection():
     collection = EntryCollection(data)
     assert len(collection.entries) == 14
     
+    assert collection.find(datetime(2023, 11, 8, 0, 0, 0)).alert
     assert collection.find(datetime(2023, 11, 8, 0, 0, 50)).alert
     assert collection.find(datetime(2023, 11, 8, 0, 2, 10)).roof_closed
-    assert not collection.find(datetime(2023, 11, 8, 0, 2, 14)).roof_closed
+    assert collection.find(datetime(2023, 11, 8, 0, 2, 14)).roof_closed
