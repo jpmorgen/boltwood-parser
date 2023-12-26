@@ -78,6 +78,23 @@ def knots_to_mph(k: float) -> float:
     return k * 1.151
 
 
+def mph_to_knots(k: float) -> float:
+    """
+    Converts MPH to knots.
+
+    Parameters
+    ----------
+    k : float
+        Speed in MPH
+
+    Returns
+    -------
+    float
+        Speed in knots
+    """
+    return k / 1.151
+
+
 def process_speed(speed: float, format: WindSpeedType) -> float:
     """
     Standardized speed. Converts `speed` to MPH if `format` is `K`

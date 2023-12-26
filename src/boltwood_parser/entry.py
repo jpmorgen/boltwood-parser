@@ -14,17 +14,17 @@ class WeatherEntry:
     """Time at which this entry occured"""
 
     sky_temperature: float
-    """Sky temperature in Celcius"""
+    """Sky temperature in specified format"""
     ambient_temperature: float
-    """Ambient temperature in Celcius"""
+    """Ambient temperature in specified format"""
     sensor_temperature: float
-    """Sensor temperature in Celcius"""
+    """Sensor temperature in specified format"""
     wind_speed: float
-    """Wind speed in mph"""
+    """Wind speed in specified format"""
     humidity: float
     """Humidity"""
     dew_point: float
-    """Dewpoint in Celcius"""
+    """Dewpoint in specified format"""
     dew_heater_percentage: float
     """Dew heater percentage"""
 
@@ -66,7 +66,8 @@ class WeatherEntry:
         while "" in parsed:
             parsed.remove("")
 
-        self.time = datetime.strptime(parsed[0] + " " + parsed[1], "%Y-%m-%d %H:%M:%S.%f")
+        self.time = datetime.strptime(
+            parsed[0] + " " + parsed[1], "%Y-%m-%d %H:%M:%S.%f")
 
         temp_scale = cast(TemperatureType, parsed[2])
         wind_scale = cast(WindSpeedType, parsed[3])
@@ -77,12 +78,12 @@ class WeatherEntry:
         if wind_scale not in ["M", "K"]:
             raise WeatherParseError(f"Invalid wind speed scale: {wind_scale}")
 
-        self.sky_temperature = process_temp(float(parsed[4]), temp_scale)
-        self.ambient_temperature = process_temp(float(parsed[5]), temp_scale)
-        self.sensor_temperature = process_temp(float(parsed[6]), temp_scale)
-        self.wind_speed = process_speed(float(parsed[7]), wind_scale)
+        self.sky_temperature = float(parsed[4])
+        self.ambient_temperature = float(parsed[5])
+        self.sensor_temperature = float(parsed[6])
+        self.wind_speed = float(parsed[7])
         self.humidity = float(parsed[8])
-        self.dew_point = process_temp(float(parsed[9]), temp_scale)
+        self.dew_point = float(parsed[9])
         self.dew_heater_percentage = float(parsed[10])
 
         self.is_raining = int(parsed[11]) == 1
@@ -94,6 +95,3 @@ class WeatherEntry:
         self.darkness = DarknessFlags(int(parsed[18]))
         self.roof_closed = int(parsed[19]) == 1
         self.alert = int(parsed[20]) == 1
-
-    def get_sky_temperature(self, scale: TemperatureType = "C"):
-        return
