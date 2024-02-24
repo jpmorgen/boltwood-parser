@@ -27,10 +27,11 @@ class EntryCollection:
         sort : bool, optional
             Sort the data by time, by default `False`. Sets `preprocess` to `True`.
         """
-        if sort: preprocess = True
-        
+        if sort:
+            preprocess = True
+
         lines = data.splitlines()
-        
+
         if preprocess:
             for i in lines:
                 if i.strip() == "":
@@ -48,7 +49,7 @@ class EntryCollection:
                     return x.time.timestamp()
                 else:
                     return 0
-            
+
             self.entries.sort(key=predicate)
 
     def process_entry(self, line: str) -> WeatherEntry:
@@ -67,7 +68,7 @@ class EntryCollection:
             Processed entry
         """
         return WeatherEntry(line)
-    
+
     def parse(self, index: int) -> WeatherEntry:
         """
         Parse a line and return the entry, or return the entry if already parsed.
@@ -91,10 +92,12 @@ class EntryCollection:
             return entry
         else:
             raise TypeError(f"Entry {entry} is neither a string nor a WeatherEntry.")
-    
+
     def find(self, time: datetime) -> WeatherEntry:
         """
-        Finds the closest weather entry to this time.
+        Finds the closest weather entry to this time. If time is before
+        the first entry, then it returns the first entry. Times
+        greater than the last entry return the last entry.
 
         Parameters
         ----------
@@ -110,16 +113,16 @@ class EntryCollection:
             return self.parse(0)
         elif time > self.parse(-1).time:
             return self.parse(-1)
-        
+
         return self._find(time)
-        
+
     def _find(self, time: datetime, _low: int = 0, _high: int = -1) -> WeatherEntry:
         """
         Internal method for searching. Does not account for first or last entry.
         """
         if _high == -1:
             _high = len(self.entries) - 1
-            
+
         if _high == _low:
             found = self.parse(_high)
             next_to_found = self.parse(_high - 1)
@@ -127,7 +130,7 @@ class EntryCollection:
                 return found
             else:
                 return next_to_found
-        
+
         mid = math.floor(_low + ((_high - _low) / 2))
         if self.parse(mid).time > time:
             return self._find(time, _low, mid)
